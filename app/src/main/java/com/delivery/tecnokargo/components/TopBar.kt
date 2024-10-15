@@ -1,18 +1,21 @@
 package com.delivery.tecnokargo.components
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(title: String) {
+fun TopBar(title: String, icon: @Composable () -> Unit = {}) {
     val topAppBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.onSecondary,
         titleContentColor = MaterialTheme.colorScheme.primary,
@@ -21,6 +24,9 @@ fun TopBar(title: String) {
     )
 
     TopAppBar(
+        navigationIcon = {
+            icon()
+        },
         title = { Text(title) },
         colors = topAppBarColors
     )

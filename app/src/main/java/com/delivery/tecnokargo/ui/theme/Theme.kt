@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.LocalContext
 private val DarkColorScheme = darkColorScheme(
     primary = md_theme_primary,
     secondary = Purple700,
-    tertiary = Teal200,
     primaryContainer = md_theme_dark_onPrimaryContainer,
 
     background = Color(0xFF1D3249),
@@ -25,14 +24,16 @@ private val DarkColorScheme = darkColorScheme(
     onTertiary = Color.White,
     onBackground = Color(0xFF1C1B1F),
     onSurface = Color(0xFFA396C9),
+    tertiary = md_cheking,
+    error = md_cheking_error
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = md_theme_primary,
     secondary = Purple700,
-    tertiary = Teal200,
     primaryContainer = md_theme_light_primary_container,
-
+    tertiary = md_cheking,
+    error = md_cheking_error,
     background = Color(0xFFFFFBFE),
     surface = Color(0xFF22359F),
     onPrimary = Color.White,
@@ -49,7 +50,7 @@ fun TecnokargoTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme =  if(darkTheme) DarkColorScheme else LightColorScheme
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,

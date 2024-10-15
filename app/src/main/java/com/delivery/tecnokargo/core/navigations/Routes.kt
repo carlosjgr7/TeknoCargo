@@ -2,9 +2,13 @@ package com.delivery.tecnokargo.core.navigations
 
 sealed class Routes(val route: String) {
 
-    object Splash : Routes("splash")
-    object Login : Routes("login")
-    object Home : Routes("home")
-
+    data object Splash : Routes("splash")
+    data object Login : Routes("login")
+    data object Home : Routes("home")
+    data object ShippingGuide : Routes("shippingguide")
+    data object ShippingGuideRoute: Routes("shippingguiderute/{id}"){
+        fun createRoute(id: String) = "shippingguiderute/$id"
+    }
+    data object Back: Routes("back")
 
 }

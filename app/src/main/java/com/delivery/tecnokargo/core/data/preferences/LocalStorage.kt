@@ -21,7 +21,7 @@ class LocalStorage @Inject constructor(
             when (value) {
                 is String -> preferences[stringPreferencesKey(key)] = value
                 is Int -> preferences[intPreferencesKey(key)] = value
-                is Boolean -> preferences[booleanPreferencesKey(key) ] = value
+                is Boolean -> preferences[booleanPreferencesKey(key)] = value
                 null -> preferences.remove(stringPreferencesKey(key))
                 else -> throw IllegalArgumentException("Unsupported type")
             }
@@ -31,9 +31,15 @@ class LocalStorage @Inject constructor(
     override suspend fun read(key: String): Flow<Any?> {
         return dataStore.data.map { preferences ->
             when {
-                preferences.contains(stringPreferencesKey(key)) -> preferences[stringPreferencesKey(key)]
-                preferences.contains(intPreferencesKey(key)) -> preferences[intPreferencesKey(key)]
-                preferences.contains(booleanPreferencesKey(key)) -> preferences[booleanPreferencesKey(key)]
+                preferences.contains(stringPreferencesKey(key))
+                -> preferences[stringPreferencesKey(key)]
+
+                preferences.contains(intPreferencesKey(key))
+                -> preferences[intPreferencesKey(key)]
+
+                preferences.contains(booleanPreferencesKey(key))
+                -> preferences[booleanPreferencesKey(key)]
+
                 else -> null
             }
         }

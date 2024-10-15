@@ -7,7 +7,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -69,14 +71,21 @@ fun MainScreenContent(
 ) {
     ConstraintLayout(
         modifier = modifier.fillMaxSize(),
-
-    ) {
+        ) {
 
         val shippinGuideAnimation = R.raw.guiderute
-        val BuildAnimation = R.raw.build
         val speed = 1200
 
-        val (shippinGuide, BuildingCategory, greeting, BuildingCategory2, BuildingCategory3) = createRefs()
+        val (
+            shippinGuide,
+            buildingCategory,
+            greeting,
+            buildingCategory2,
+            buildingCategory3,
+            spacer,
+            spacer2
+        ) = createRefs()
+
         val startGuideline = createGuidelineFromStart(12.dp)
         val toptGuideline = createGuidelineFromTop(12.dp)
         val bottomGuideline = createGuidelineFromBottom(25.dp)
@@ -89,7 +98,7 @@ fun MainScreenContent(
 
         createHorizontalChain(
             shippinGuide,
-            BuildingCategory,
+            buildingCategory,
             chainStyle = ChainStyle.Spread
         )
 
@@ -115,7 +124,7 @@ fun MainScreenContent(
                     fontFamily = FontFamily.Serif,
                     fontSize = 24.sp,
 
-                )
+                    )
             }
         }
 
@@ -127,11 +136,15 @@ fun MainScreenContent(
                 }
                 .fillMaxWidth(0.45f)
                 .fillMaxHeight(0.5f)
+                .clickable { selectOption.invoke(Routes.ShippingGuide.route) }
         ) {
             AnimatedVisibility(
                 visible = visible,
                 enter = fadeIn(animationSpec = tween(durationMillis = speed)) +
-                        slideInHorizontally(initialOffsetX = { -it }, animationSpec = tween(durationMillis = speed))
+                        slideInHorizontally(
+                            initialOffsetX = { -it },
+                            animationSpec = tween(durationMillis = speed)
+                        )
             ) {
                 CategorySelected(
                     color = MaterialTheme.colorScheme.primary,
@@ -142,15 +155,15 @@ fun MainScreenContent(
             }
         }
 
-
         Box(
             modifier = Modifier
-                .constrainAs(BuildingCategory) {
+                .constrainAs(buildingCategory) {
                     start.linkTo(shippinGuide.end)
                     top.linkTo(shippinGuide.top)
                 }
-                .fillMaxHeight(0.34f)
                 .fillMaxWidth(0.45f)
+                .fillMaxHeight(0.34f)
+
         ) {
             AnimatedVisibility(
                 visible = visible,
@@ -162,16 +175,24 @@ fun MainScreenContent(
             ) {
                 CategorySelected(
                     color = Color(0xfff9f9c5),
-                    animation = BuildAnimation,
+                    animation = R.raw.build,
                 )
             }
         }
 
+        Spacer(modifier = Modifier.padding(10.dp).constrainAs(spacer){
+            top.linkTo(shippinGuide.bottom)
+            start.linkTo(shippinGuide.start)
+            end.linkTo(shippinGuide.end)
+        })
+
         Box(
             modifier = Modifier
-                .constrainAs(BuildingCategory2) {
-                    start.linkTo(shippinGuide.start)
+                .constrainAs(buildingCategory2) {
+                    start.linkTo(spacer.start)
+                    end.linkTo(spacer.end)
                     bottom.linkTo(bottomGuideline)
+                    top.linkTo(spacer.bottom)
 
                 }
                 .fillMaxWidth(0.45f)
@@ -181,23 +202,30 @@ fun MainScreenContent(
                 visible = visible,
                 enter = fadeIn(animationSpec = tween(durationMillis = speed)) +
                         slideInVertically(
-                            initialOffsetY = { it+100 },
+                            initialOffsetY = { it + 100 },
                             animationSpec = tween(durationMillis = speed)
                         )
             ) {
                 CategorySelected(
                     color = Color(0xff759df0),
-                    animation = BuildAnimation,
+                    animation = R.raw.build,
 
-                )
+                    )
             }
         }
 
+        Spacer(modifier = Modifier.padding(10.dp).constrainAs(spacer2){
+            top.linkTo(buildingCategory.bottom)
+            start.linkTo(buildingCategory.start)
+            end.linkTo(buildingCategory.end)
+        })
+
         Box(
             modifier = Modifier
-                .constrainAs(BuildingCategory3) {
-                    start.linkTo(BuildingCategory.start)
-                    end.linkTo(BuildingCategory.end)
+                .constrainAs(buildingCategory3) {
+                    start.linkTo(spacer2.start)
+                    end.linkTo(spacer2.end)
+                    top.linkTo(spacer2.bottom)
                     bottom.linkTo(bottomGuideline)
                 }
                 .fillMaxWidth(0.45f)
@@ -206,21 +234,24 @@ fun MainScreenContent(
             AnimatedVisibility(
                 visible = visible,
                 enter = fadeIn(animationSpec = tween(durationMillis = speed)) +
-                        slideInHorizontally(initialOffsetX = { it+100 }, animationSpec = tween(durationMillis = speed))
+                        slideInHorizontally(
+                            initialOffsetX = { it + 100 },
+                            animationSpec = tween(durationMillis = speed)
+                        )
 
             ) {
 
                 CategorySelected(
                     color = Color(0xff933927),
-                    animation = BuildAnimation,
+                    animation = R.raw.build,
 
-                )
+                    )
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MainScreenPreview() {
     MainScreen(selectOption = {})

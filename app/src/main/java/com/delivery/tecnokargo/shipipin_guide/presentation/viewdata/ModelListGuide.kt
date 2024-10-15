@@ -1,19 +1,21 @@
 package com.delivery.tecnokargo.shipipin_guide.presentation.viewdata
 
 data class Product(
-    val codigo: String,
+    val id: String,
     val nombre: String,
-    val descripcion: String
+    var checking: Boolean,
+    val descripcion: String,
+    val travelRouteId: String
 )
 
 data class TravelRoute(
-    val codigo: String,
+    val id: String,
     val direccion: String,
-    val list_products: List<String>
+    val guideRouteId: String,
+    var checking: Boolean
 )
 
 data class GuideRoute(
-    val codigo: String,
-    val list_travelRoutes: List<String>,
+    val id: String,
     val description: String
 )
