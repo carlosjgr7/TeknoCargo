@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt.gradle)
+    alias(libs.plugins.jetbrainsKotlinSerialization)
+    alias(libs.plugins.kotlin.parcelize)
     kotlin("kapt")
 
 }
@@ -65,7 +67,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.json)
-    implementation(libs.compose.transition)
+    implementation(libs.nav.compose)
     implementation(libs.material)
     implementation(libs.material.icons)
     //conmstrainLayout

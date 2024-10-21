@@ -35,19 +35,25 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.delivery.tecnokargo.R
 import com.delivery.tecnokargo.components.BottomNavigationBar
 import com.delivery.tecnokargo.components.TopBar
-import com.delivery.tecnokargo.core.navigations.Routes
+import com.delivery.tecnokargo.core.navigations.ButtomBarOptions
 import com.delivery.tecnokargo.main.presentation.components.CategorySelected
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    selectOption: (String) -> Unit,
+    goToShippinGuide: () -> Unit,
+    goToBack: () -> Unit ,
 ) {
     Scaffold(
         topBar = { TopBar("Main Screen") },
         bottomBar = {
-            BottomNavigationBar(Routes.Home) {
-                if (it !== Routes.Home.route) selectOption.invoke(it)
+            BottomNavigationBar(ButtomBarOptions.Home) {
+                when (it) {
+                    ButtomBarOptions.Home -> {}
+                    ButtomBarOptions.Settings -> goToBack.invoke()
+                    ButtomBarOptions.Profile -> {}
+                }
+                goToBack.invoke()
             }
         },
         content = { paddingValues ->
@@ -55,8 +61,8 @@ fun MainScreen(
                 modifier = Modifier
                     .padding(paddingValues)
                     .background(MaterialTheme.colorScheme.onSecondary),
-                selectOption = {
-                    selectOption.invoke(it)
+                goToShippinGuide = {
+                    goToShippinGuide.invoke()
                 }
             )
         }
@@ -66,7 +72,7 @@ fun MainScreen(
 
 @Composable
 fun MainScreenContent(
-    selectOption: (String) -> Unit,
+    goToShippinGuide: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ConstraintLayout(
@@ -136,7 +142,7 @@ fun MainScreenContent(
                 }
                 .fillMaxWidth(0.45f)
                 .fillMaxHeight(0.5f)
-                .clickable { selectOption.invoke(Routes.ShippingGuide.route) }
+                .clickable { goToShippinGuide.invoke() }
         ) {
             AnimatedVisibility(
                 visible = visible,
@@ -254,5 +260,8 @@ fun MainScreenContent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen(selectOption = {})
+    MainScreen(
+        goToShippinGuide = {},
+        goToBack = {}
+    )
 }

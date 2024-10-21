@@ -12,16 +12,17 @@ appcompat = "1.7.0"
 material = "1.12.0"
 material-icons = "1.7.3"
 hilt = "2.46"
-hilt-navigation-compose = "1.0.0"
+hilt-navigation-compose = "1.2.0"
 retrofit = "2.11.0"
 retrofit-kotlinx-serialization-converter = "1.0.0"
 okhttp = "4.11.0"
 chucker = "4.0.0"
 data-store ="1.1.1"
 androidx-json = "1.6.0"
-compose-transition = "2.8.2"
+compose-navigation = "2.8.3"
 constrain-layout = "1.0.1"
 lottie = "6.4.0"
+kotlinParcelize = "1.8.10"
 
 
 [libraries]
@@ -43,7 +44,7 @@ androidx-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 material-icons = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons" }
-compose-transition = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-transition" }
+nav-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
 
 #Constrain
 android-constraint-layout={group="androidx.constraintlayout",name="constraintlayout-compose", version.ref="constrain-layout"}
@@ -76,4 +77,5 @@ chucker-release = { group = "com.github.chuckerteam.chucker", name = "library-no
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-
+jetbrainsKotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize",  version.ref = "kotlinParcelize"  }

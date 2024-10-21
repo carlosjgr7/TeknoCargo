@@ -3,14 +3,14 @@ package com.delivery.tecnokargo.core.navigations
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.delivery.tecnokargo.login.presentation.ui.LoginScreen
 import com.delivery.tecnokargo.main.presentation.ui.MainScreen
-import com.delivery.tecnokargo.shipipin_guide.presentation.ui.ShipinGuideScreen
+import com.delivery.tecnokargo.shipipin_guide.presentation.ui.ShipGuideScreen
+import com.delivery.tecnokargo.shipipin_product.presentation.ui.ShippingProductRute
 import com.delivery.tecnokargo.shipipin_rute.presentation.ui.ShippingGuideRute
 import com.delivery.tecnokargo.splash.presentation.ui.SplashScreen
 
@@ -19,17 +19,14 @@ fun AppNavigation() {
 
     val navController = rememberNavController()
     val animationSpeed = 350
-    val startDestination = Routes.Splash.route
+    val startDestination = Splash
 
     NavHost(navController = navController, startDestination = startDestination) {
-        composable(
-            route = Routes.Splash.route,
-        ) {
-            SplashScreen { navController.navigate(Routes.Login.route) }
+        composable<Splash> {
+            SplashScreen { navController.navigate(Login) }
         }
 
-        composable(
-            route = Routes.Login.route,
+        composable<Login>(
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
@@ -56,12 +53,11 @@ fun AppNavigation() {
             },
         ) {
             LoginScreen {
-                navController.navigate(Routes.Home.route)
+                navController.navigate(Home)
             }
         }
 
-        composable(
-            route = Routes.Home.route,
+        composable<Home>(
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
@@ -87,17 +83,13 @@ fun AppNavigation() {
                 )
             },
         ) {
-            MainScreen {
-                when (it) {
-                    Routes.Home.route -> navController.navigate(Routes.Home.route)
-                    Routes.Login.route -> navController.navigate(Routes.Login.route)
-                    Routes.ShippingGuide.route -> navController.navigate(Routes.ShippingGuide.route)
-                }
-            }
+            MainScreen(
+                goToShippinGuide = { navController.navigate(ShippingGuide) },
+                goToBack = { navController.popBackStack() }
+            )
         }
 
-        composable(
-            route = Routes.ShippingGuide.route,
+        composable<ShippingGuide>(
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
@@ -123,17 +115,15 @@ fun AppNavigation() {
                 )
             },
         ) {
-            ShipinGuideScreen() { action ->
-                if (action == Routes.Back.route) navController.popBackStack()
-                else navController.navigate(Routes.ShippingGuideRoute.createRoute(action)
-                )
-            }
+            ShipGuideScreen(
+                goToShippingGuideRutes = { id ->
+                    navController.navigate(ShippingGuideRoute(id))
+                },
+                goToBack = { navController.popBackStack() }
+            )
         }
 
-
-        composable(
-            route = Routes.ShippingGuideRoute.route,
-            arguments = listOf(navArgument("id") { type = NavType.StringType }),
+        composable<ShippingGuideRoute>(
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
@@ -159,12 +149,51 @@ fun AppNavigation() {
                 )
             },
         ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("id") ?: ""
-            ShippingGuideRute(id = id){action ->
-                if (action == Routes.Back.route) navController.popBackStack()
-                else navController.navigate(Routes.ShippingGuide.route)
-            }
+            val shippingGuideRoute: ShippingGuideRoute = backStackEntry.toRoute()
+            ShippingGuideRute(
+                id = shippingGuideRoute.id,
+                goToRuteDetail = {
+                    navController.navigate(ShippingProductRoute(it))
+                },
+                gotoBack = {
+                    navController.popBackStack()
+                }
+            )
         }
 
+        composable<ShippingProductRoute>(
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+        ) { backStackEntry ->
+            val routeID: ShippingProductRoute = backStackEntry.toRoute()
+            ShippingProductRute(
+                id = routeID.id,
+                gotoBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
     }
 }

@@ -14,16 +14,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.delivery.tecnokargo.core.navigations.Routes
+import com.delivery.tecnokargo.core.navigations.ButtomBarOptions
 
 @Composable
 fun BottomNavigationBar(
-    activeRote: Routes,
-    navigateTo : (String) -> Unit
+    activeRote: ButtomBarOptions,
+    navigateTo : (ButtomBarOptions) -> Unit
 ) {
     val bottomNavigationItems = listOf(
-        NavigationItem(Routes.Home.route, "Home", Icons.Filled.Home),
-        NavigationItem(Routes.Login.route, "Settings", Icons.Filled.Settings)
+        NavigationItem(ButtomBarOptions.Home, "Home", Icons.Filled.Home),
+        NavigationItem(ButtomBarOptions.Settings, "Settings", Icons.Filled.Settings)
     )
 
     BottomAppBar(
@@ -34,9 +34,9 @@ fun BottomNavigationBar(
                     modifier = Modifier.weight(if(item.label!="Settings") 1f else 0.5f),
                     icon = { Icon(item.icon, contentDescription = "item.label") },
                     label = { Text(item.label) },
-                    selected = activeRote.route == item.route,
+                    selected = activeRote == item.option,
                     onClick = {
-                        navigateTo.invoke(item.route)
+                        navigateTo.invoke(item.option)
                     }
                 )
                 if (index < bottomNavigationItems.size - 1) {
@@ -50,4 +50,4 @@ fun BottomNavigationBar(
     )
 }
 
-data class NavigationItem(val route: String, val label: String, val icon: ImageVector)
+data class NavigationItem(val option: ButtomBarOptions, val label: String, val icon: ImageVector)

@@ -28,14 +28,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.delivery.tecnokargo.R
 import com.delivery.tecnokargo.components.TopBar
-import com.delivery.tecnokargo.core.navigations.Routes
 import com.delivery.tecnokargo.mockdata.mockGuideRoutes
 import com.delivery.tecnokargo.shipipin_guide.presentation.viewdata.GuideRoute
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ShipinGuideScreen(
-    advance: (String) -> Unit = {}
+fun ShipGuideScreen(
+    goToShippingGuideRutes: (String) -> Unit = {},
+    goToBack: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -43,7 +43,7 @@ fun ShipinGuideScreen(
                 Icon(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
-                        .clickable { advance(Routes.Back.route) },
+                        .clickable { goToBack.invoke() },
                     painter = painterResource(R.drawable.baseline_arrow_back_24),
                     contentDescription = "back",
                     tint = MaterialTheme.colorScheme.primary
@@ -54,14 +54,13 @@ fun ShipinGuideScreen(
             ShippingGuideContent(
                 paddingValues,
                 selected = {
-                    advance(it)
-                }
+                    goToShippingGuideRutes(it)
+                },
+
 
             )
-        },
-
-        )
-
+        }
+    )
 }
 
 @Composable
@@ -81,7 +80,7 @@ fun ShippingGuideContent(
                 guideRoutes[cont],
                 selected = {
                     selected(it.id)
-                }
+                },
             )
         }
     }
@@ -130,5 +129,5 @@ fun CardContent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ShipinGuideScreenPreview() {
-    ShipinGuideScreen()
+    ShipGuideScreen()
 }
