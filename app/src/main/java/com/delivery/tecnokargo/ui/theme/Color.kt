@@ -18,6 +18,7 @@ val Teal200 = Color(0xFF1A2657)
 val md_theme_primary = Color(0xFF9EA8BD)
 val md_cheking = Color(0xFF76D277)
 val md_cheking_error = Color(0xFFAB2D25)
+val md_gray_container = Color(0xFF888787)
 
 
 
