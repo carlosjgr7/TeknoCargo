@@ -90,6 +90,19 @@ dependencies {
     //chucker
     debugImplementation(libs.chucker.debug)
     releaseImplementation(libs.chucker.release)
+    //CameraScann
+    implementation(libs.camera.core)
+    implementation(libs.camera.camera2)
+    implementation(libs.camera.view)
+    implementation(libs.camera.extensions)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.runtime.permissions)
+    implementation(libs.androidx.camera.mlkit.vision)
+    implementation(libs.play.services.mlkit.barcode.scanning)
+    implementation(libs.play.services.mlkit.text.recognition.common)
+    implementation(libs.play.services.mlkit.text.recognition)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

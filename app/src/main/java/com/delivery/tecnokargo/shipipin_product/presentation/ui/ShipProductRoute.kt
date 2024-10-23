@@ -1,37 +1,25 @@
 package com.delivery.tecnokargo.shipipin_product.presentation.ui
 
-import android.graphics.drawable.PaintDrawable
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DismissValue
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,8 +29,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -50,20 +38,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.delivery.tecnokargo.R
+import com.delivery.tecnokargo.components.RecognizerBarCode
 import com.delivery.tecnokargo.components.TopBar
 import com.delivery.tecnokargo.mockdata.mockProducts
-import com.delivery.tecnokargo.shipipin_guide.presentation.ui.CardContent
 import com.delivery.tecnokargo.shipipin_guide.presentation.viewdata.Product
-import kotlinx.coroutines.delay
 
 @Composable
 fun ShippingProductRute(
@@ -98,7 +81,6 @@ fun ShippingProductRute(
 }
 
 
-
 @Composable
 fun ShippingProductRouteContent(
     paddingValues: PaddingValues,
@@ -107,9 +89,14 @@ fun ShippingProductRouteContent(
 ) {
     var productid by remember { mutableStateOf("") }
     var aling by remember { mutableStateOf(Alignment.CenterHorizontally) }
+    var products by remember { mutableStateOf<List<Product>>(mockProducts().filter { it.travelRouteId == ruteId }) }
 
-    val products = mockProducts().filter { it.travelRouteId == ruteId }
-
+    var viewScanner by remember { mutableStateOf(false) }
+    var dynamicWeight by remember { mutableFloatStateOf(1f) }
+    val animatedWeight by animateFloatAsState(
+        targetValue = dynamicWeight,
+        animationSpec = tween(durationMillis = 300), label = ""
+    )
 
     Column(
         Modifier
@@ -119,10 +106,31 @@ fun ShippingProductRouteContent(
     ) {
         Column(
             Modifier
-                .weight(1f)
+                .weight(animatedWeight)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
         ) {
+            AnimatedVisibility(
+                visible = viewScanner,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Box(
+                    Modifier
+                        .height(80.dp)
+                        .width(120.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0xFFCDCDCD))
+                ) {
+                    RecognizerBarCode(
+                        onDimissPermission = { viewScanner = false },
+                        onScan = {
+                            productid = it.uppercase()
+                            products = toggleProductChecking(products, productid)
+                        }
+                    )
+                }
+            }
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -130,7 +138,7 @@ fun ShippingProductRouteContent(
             ) {
                 OutlinedTextField(
                     value = productid,
-                    onValueChange = { productid = it },
+                    onValueChange = { productid = it.uppercase() },
                     label = { Text("Product ID") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     modifier = Modifier.fillMaxWidth(),
@@ -138,7 +146,8 @@ fun ShippingProductRouteContent(
                         IconButton(
                             modifier = Modifier.size(32.dp),
                             onClick = {
-
+                                viewScanner = !viewScanner
+                                dynamicWeight = if (viewScanner) 1.5f else 1f
                             }
                         ) {
                             Image(
@@ -153,14 +162,13 @@ fun ShippingProductRouteContent(
             }
             OutlinedButton(
                 onClick = {
-                     },
+                    products = toggleProductChecking(products, productid)
+                },
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
                     .align(aling),
                 shape = RoundedCornerShape(12.dp),
-
-
-                ) {
+            ) {
                 Text("Checking Product")
             }
         }
@@ -181,7 +189,7 @@ fun ShippingProductRouteContent(
                     CardProductContent(
                         products[cont],
                         selected = {
-                            selected()
+                            productid = it
                         },
                     )
                 }
@@ -191,25 +199,42 @@ fun ShippingProductRouteContent(
 }
 
 @Composable
-fun CardProductContent(product: Product, selected: () -> Unit) {
-    Row(Modifier.fillMaxWidth()){
+fun CardProductContent(product: Product, selected: (String) -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clickable { selected(product.code) }) {
         Image(
-            painter = painterResource(if(product.checking) R.drawable.producto else R.drawable.caja),
+            painter = painterResource(if (product.checking) R.drawable.producto else R.drawable.caja),
             contentDescription = "back",
-            modifier = Modifier.size(42.dp).align(Alignment.CenterVertically)
+            modifier = Modifier
+                .size(42.dp)
+                .align(Alignment.CenterVertically)
         )
-        Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 5.dp)){
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 5.dp)
+        ) {
             Text(product.nombre)
             Text(product.descripcion)
             Text(product.code)
         }
 
     }
-    HorizontalDivider( color = MaterialTheme.colorScheme.primary)
+    HorizontalDivider(color = MaterialTheme.colorScheme.primary)
 
 }
 
-
+private fun toggleProductChecking(products: List<Product>, productId: String): List<Product> {
+    return products.map { product ->
+        if (product.code.uppercase() == productId) {
+            product.copy(checking = true)
+        } else {
+            product
+        }
+    }
+}
 
 
 @Preview(showBackground = true, showSystemUi = true)

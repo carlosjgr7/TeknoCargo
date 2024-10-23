@@ -6,7 +6,7 @@ import com.delivery.tecnokargo.shipipin_guide.presentation.viewdata.TravelRoute
 
 fun mockProducts(): List<Product> {
     return listOf(
-        Product("P001", "Caja de Productos A", false,"Descripción del Producto A","TR001",),
+        Product("P001", "Caja de Productos A", false,"Descripción del Producto A","TR001","DD4DEC62F3"),
         Product("P002", "Caja de Productos B",false, "Descripción del Producto B","TR001",),
         Product("P003", "Caja de Productos C", true,"Descripción del Producto C","TR001",),
         Product("P003", "Caja de Productos C", true,"Descripción del Producto C","TR001", ),
