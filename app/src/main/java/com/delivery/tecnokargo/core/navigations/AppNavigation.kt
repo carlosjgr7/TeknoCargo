@@ -85,6 +85,8 @@ fun AppNavigation() {
         ) {
             MainScreen(
                 goToShippinGuide = { navController.navigate(ShippingGuide) },
+                goToStatistics = { navController.navigate(Statistics) },
+                goToMoveShipping = { navController.navigate(MoveShipping) },
                 goToBack = { navController.popBackStack() }
             )
         }

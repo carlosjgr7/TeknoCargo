@@ -15,6 +15,12 @@ object Home
 object ShippingGuide
 
 @Serializable
+object Statistics
+
+@Serializable
+object MoveShipping
+
+@Serializable
 data class ShippingGuideRoute(val id: String)
 
 @Serializable

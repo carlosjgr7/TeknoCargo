@@ -1,5 +1,9 @@
 package com.delivery.tecnokargo.shipipin_product.presentation.ui
 
+import android.content.Context
+import android.media.MediaPlayer
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -38,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -87,6 +92,7 @@ fun ShippingProductRouteContent(
     selected: () -> Unit,
     ruteId: String
 ) {
+    val context = LocalContext.current
     var productid by remember { mutableStateOf("") }
     var aling by remember { mutableStateOf(Alignment.CenterHorizontally) }
     var products by remember { mutableStateOf<List<Product>>(mockProducts().filter { it.travelRouteId == ruteId }) }
@@ -126,7 +132,7 @@ fun ShippingProductRouteContent(
                         onDimissPermission = { viewScanner = false },
                         onScan = {
                             productid = it.uppercase()
-                            products = toggleProductChecking(products, productid)
+                            products = toggleProductChecking(products, productid, context)
                         }
                     )
                 }
@@ -162,7 +168,7 @@ fun ShippingProductRouteContent(
             }
             OutlinedButton(
                 onClick = {
-                    products = toggleProductChecking(products, productid)
+                    products = toggleProductChecking(products, productid, context)
                 },
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
@@ -203,7 +209,7 @@ fun CardProductContent(product: Product, selected: (String) -> Unit) {
     Row(
         Modifier
             .fillMaxWidth()
-            .clickable { selected(product.code) }) {
+            .clickable { selected(product.trakingcode) }) {
         Image(
             painter = painterResource(if (product.checking) R.drawable.producto else R.drawable.caja),
             contentDescription = "back",
@@ -218,24 +224,34 @@ fun CardProductContent(product: Product, selected: (String) -> Unit) {
         ) {
             Text(product.nombre)
             Text(product.descripcion)
-            Text(product.code)
+            Text(product.trakingcode)
         }
 
     }
     HorizontalDivider(color = MaterialTheme.colorScheme.primary)
-
 }
 
-private fun toggleProductChecking(products: List<Product>, productId: String): List<Product> {
+private fun toggleProductChecking(
+    products: List<Product>,
+    productId: String,
+    context: Context,
+): List<Product> {
+    val audioResourceId = R.raw.pitido
+    val mediaPlayer = MediaPlayer.create(context, audioResourceId)
+    val vibrator = context.getSystemService(Vibrator::class.java)
     return products.map { product ->
-        if (product.code.uppercase() == productId) {
+        if (product.trakingcode.uppercase() == productId && !product.checking) {
+            mediaPlayer.start()
+            vibrator?.vibrate(
+                VibrationEffect
+                    .createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
+            )
             product.copy(checking = true)
         } else {
             product
         }
     }
 }
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
