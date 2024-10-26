@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.delivery.tecnokargo.R
 
@@ -89,7 +87,7 @@ private fun MoveShippingBox(visible: Boolean, speedAnimation: Int, modifier: Mod
         ) {
             Box(modifier = Modifier.clickable { goToMoveShipping.invoke() }) {
                 CategorySelected(
-                    animation = R.raw.build,
+                    animation = R.raw.moveshipping,
                     categoryname = "Move Shipping",
                 )
             }
