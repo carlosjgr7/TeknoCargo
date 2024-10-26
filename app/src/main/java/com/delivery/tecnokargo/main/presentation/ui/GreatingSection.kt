@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,7 +32,8 @@ fun GreetingSection(visible: Boolean,speedAnimation: Int) {
             fontSize = 24.sp,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 25.dp)
+                .padding(bottom = 25.dp),
+            color = MaterialTheme.colorScheme.onTertiary
         )
     }
 }

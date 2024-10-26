@@ -65,7 +65,6 @@ private fun ShippingGuideBox(
                     .clickable { goToShippinGuide.invoke() }
             ) {
                 CategorySelected(
-                    colorbackGround = MaterialTheme.colorScheme.primary,
                     animation = R.raw.guiderute,
                     categoryname = "Shipping Guide",
                     modifier = Modifier.fillMaxSize()
@@ -90,7 +89,6 @@ private fun MoveShippingBox(visible: Boolean, speedAnimation: Int, modifier: Mod
         ) {
             Box(modifier = Modifier.clickable { goToMoveShipping.invoke() }) {
                 CategorySelected(
-                    colorbackGround = Color(0xfff9f9c5),
                     animation = R.raw.build,
                     categoryname = "Move Shipping",
                 )

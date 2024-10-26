@@ -56,7 +56,7 @@ fun CategorySelected(
                 color = Color.Black,
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
+                fontSize = 18.sp
             )
 
             Spacer(modifier = Modifier.height(2.dp))

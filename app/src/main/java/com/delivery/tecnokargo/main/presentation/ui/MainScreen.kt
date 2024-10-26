@@ -45,7 +45,7 @@ fun MainScreen(
             MainScreenContent(
                 modifier = Modifier
                     .padding(paddingValues)
-                    .background(MaterialTheme.colorScheme.onSecondary),
+                    .background(MaterialTheme.colorScheme.background),
                 goToShippinGuide = {
                     goToShippinGuide.invoke()
                 },

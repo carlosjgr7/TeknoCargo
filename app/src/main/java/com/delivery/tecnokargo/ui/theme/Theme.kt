@@ -17,7 +17,7 @@ private val DarkColorScheme = darkColorScheme(
     secondary = Purple700,
     primaryContainer = md_theme_dark_onPrimaryContainer,
 
-    background = Color(0xFF1D3249),
+    background = md_back_screens,
     surface = Color(0xFF22359F),
     onPrimary = Color.White,
     onSecondary = Color.White,
@@ -34,7 +34,7 @@ private val LightColorScheme = lightColorScheme(
     primaryContainer = md_theme_light_primary_container,
     tertiary = md_cheking,
     error = md_cheking_error,
-    background = Color(0xFFFFFBFE),
+    background = md_back_screens,
     surface = Color(0xFF22359F),
     onPrimary = Color.White,
     onSecondary = Color.White,
