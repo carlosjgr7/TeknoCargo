@@ -17,7 +17,7 @@ fun SplashScreen(
 
     AnimationSplashContent(
         scaleAnimation = scaleAnimation,
-        durationMillisAnimation = 1000,
+        durationMillisAnimation = 2000,
         delayScreen = 100L,
         goToMain = {
             goToMain.invoke()

@@ -1,18 +1,23 @@
 package com.delivery.tecnokargo.core.navigations
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.delivery.tecnokargo.config.presentation.ui.ConfigView
 import com.delivery.tecnokargo.login.presentation.ui.LoginScreen
 import com.delivery.tecnokargo.main.presentation.ui.MainScreen
+import com.delivery.tecnokargo.move_shipping.presentation.ui.MoveRouteView
 import com.delivery.tecnokargo.shipipin_guide.presentation.ui.ShipGuideScreen
 import com.delivery.tecnokargo.shipipin_product.presentation.ui.ShippingProductRute
 import com.delivery.tecnokargo.shipipin_rute.presentation.ui.ShippingGuideRute
 import com.delivery.tecnokargo.splash.presentation.ui.SplashScreen
+import com.delivery.tecnokargo.statistics.presentation.ui.StatisticsView
 
 @Composable
 fun AppNavigation() {
@@ -22,7 +27,20 @@ fun AppNavigation() {
     val startDestination = Splash
 
     NavHost(navController = navController, startDestination = startDestination) {
-        composable<Splash> {
+        composable<Splash>(
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+        ) {
             SplashScreen { navController.navigate(Login) }
         }
 
@@ -78,7 +96,7 @@ fun AppNavigation() {
             },
             popExitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec = tween(animationSpeed),
                 )
             },
@@ -87,14 +105,17 @@ fun AppNavigation() {
                 goToShippinGuide = { navController.navigate(ShippingGuide) },
                 goToStatistics = { navController.navigate(Statistics) },
                 goToMoveShipping = { navController.navigate(MoveShipping) },
-                goToBack = { navController.popBackStack() }
+                goToBack = { navController.popBackStack() },
+                goToSettings = {
+                    navController.navigate(Settings)
+                }
             )
         }
 
         composable<ShippingGuide>(
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec = tween(animationSpeed),
                 )
             },
@@ -128,7 +149,7 @@ fun AppNavigation() {
         composable<ShippingGuideRoute>(
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec = tween(animationSpeed),
                 )
             },
@@ -154,8 +175,8 @@ fun AppNavigation() {
             val shippingGuideRoute: ShippingGuideRoute = backStackEntry.toRoute()
             ShippingGuideRute(
                 id = shippingGuideRoute.id,
-                goToRuteDetail = {
-                    navController.navigate(ShippingProductRoute(it))
+                goToRuteDetail = {id, type ->
+                    navController.navigate(ShippingProductRoute(id, type))
                 },
                 gotoBack = {
                     navController.popBackStack()
@@ -166,7 +187,7 @@ fun AppNavigation() {
         composable<ShippingProductRoute>(
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec = tween(animationSpeed),
                 )
             },
@@ -189,13 +210,114 @@ fun AppNavigation() {
                 )
             },
         ) { backStackEntry ->
-            val routeID: ShippingProductRoute = backStackEntry.toRoute()
+            val route: ShippingProductRoute = backStackEntry.toRoute()
+
             ShippingProductRute(
-                id = routeID.id,
+                id = route.id,
+                seekProducts = route.type,
                 gotoBack = {
                     navController.popBackStack()
                 }
             )
+        }
+
+        composable<Statistics>(
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+        ) { backStackEntry ->
+            StatisticsView(
+                goToBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<MoveShipping>(
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+        ) { backStackEntry ->
+            MoveRouteView(
+                gotoBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<Settings>(
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+        ) { backStackEntry ->
+            ConfigView(
+                goToHome = {
+                    navController.navigate(Home)
+                },
+                logout = {
+                    navController.navigate(Login)
+                }
+            )
+
         }
     }
 }

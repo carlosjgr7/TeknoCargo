@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.delivery.tecnokargo.components.BackToExitHandler
 import com.delivery.tecnokargo.components.BottomNavigationBar
 import com.delivery.tecnokargo.components.TopBar
 import com.delivery.tecnokargo.core.navigations.ButtomBarOptions
@@ -27,18 +28,18 @@ fun MainScreen(
     goToShippinGuide: () -> Unit,
     goToStatistics: () -> Unit,
     goToMoveShipping: () -> Unit,
+    goToSettings: () -> Unit,
     goToBack: () -> Unit,
 ) {
+    BackToExitHandler()
     Scaffold(
         topBar = { TopBar("Main Screen") },
         bottomBar = {
             BottomNavigationBar(ButtomBarOptions.Home) {
                 when (it) {
                     ButtomBarOptions.Home -> {}
-                    ButtomBarOptions.Settings -> goToBack.invoke()
-                    ButtomBarOptions.Profile -> {}
+                    ButtomBarOptions.Settings -> goToSettings.invoke()
                 }
-                goToBack.invoke()
             }
         },
         content = { paddingValues ->
@@ -50,10 +51,10 @@ fun MainScreen(
                     goToShippinGuide.invoke()
                 },
                 goToMoveShipping = {
-                   // goToMoveShipping.invoke()
+                    goToMoveShipping.invoke()
                 },
                 goToStatistics = {
-                   // goToStatistics.invoke()
+                    goToStatistics.invoke()
                 }
             )
         }
@@ -102,6 +103,7 @@ fun MainScreenContent(
 fun MainScreenPreview() {
     MainScreen(
         goToShippinGuide = {},
+        {},
         {},
         {},
         {}

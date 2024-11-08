@@ -11,7 +11,8 @@ fun GenericAlertDialog(
     title: String,
     message: String,
     confirmButton: String,
-    onAction: () -> Unit
+    onAction: () -> Unit,
+    showCancel: Boolean = true,
 
 ) {
     AlertDialog(
@@ -33,7 +34,9 @@ fun GenericAlertDialog(
                 )
             }
         },
+
         dismissButton = {
+            if (showCancel)
             Button(onClick = { onDismiss.invoke() }) {
                 Text(
                     text = "Cancel"

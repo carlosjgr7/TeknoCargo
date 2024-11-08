@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.delivery.tecnokargo.components.PieChart
+import com.delivery.tecnokargo.statistics.data.model.ChartPieModel
 
 
 @Composable
@@ -50,6 +51,13 @@ private fun StatisticsSection(
     colorbackGround: Color = MaterialTheme.colorScheme.onTertiary,
     goToStatistics: () -> Unit,
 ) {
+    val dataPie = listOf(
+        ChartPieModel("B", 20, Color(0xFFFFC107)),
+        ChartPieModel("A", 30, Color(0xFF03A9F4)),
+        ChartPieModel("C", 45, Color(0xFFC95B38)),
+        ChartPieModel("D", 15, Color(0xFFCE93D8))
+    )
+
     Box(modifier = modifier) {
         AnimatedVisibility(
             visible = visible,
@@ -65,15 +73,21 @@ private fun StatisticsSection(
                     .background(colorbackGround, RoundedCornerShape(12.dp))
                     .clickable { goToStatistics.invoke() }
             ) {
-                Row(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                ) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .weight(1f)
                     ) {
-                        PieChart()
+                        PieChart(
+                            data = dataPie,
+                            modifier = Modifier.fillMaxSize(),
+                            animationChart = false
+                        )
                     }
 
                     Box(

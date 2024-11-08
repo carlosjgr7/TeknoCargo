@@ -1,6 +1,6 @@
 tasks.register("createModuleStructure") {
     doLast {
-        val moduleName = "shipipin_product"
+        val moduleName = "move_shipping"
 
         val baseDir = "${projectDir}/src/main/java/com/delivery/tecnokargo/$moduleName"
         val dirs = listOf(

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -29,11 +30,12 @@ import com.delivery.tecnokargo.R
 import com.delivery.tecnokargo.components.TopBar
 import com.delivery.tecnokargo.mockdata.mockTravelRoutes
 import com.delivery.tecnokargo.shipipin_guide.presentation.viewdata.TravelRoute
+import com.delivery.tecnokargo.shipipin_rute.presentation.model.RequestProductsEnum
 
 @Composable
 fun ShippingGuideRute(
     id: String,
-    goToRuteDetail: (String) -> Unit = {},
+    goToRuteDetail: (String, RequestProductsEnum) -> Unit = ({ _, _ -> }),
     gotoBack: () -> Unit = {},
 
     ) {
@@ -56,8 +58,8 @@ fun ShippingGuideRute(
         content = { paddingValues ->
             ShippingGuideRuteContent(
                 paddingValues,
-                selected = {
-                    goToRuteDetail(it)
+                selected = { id, type ->
+                    goToRuteDetail(id, type)
                 },
                 guideId = id,
             )
@@ -70,7 +72,7 @@ fun ShippingGuideRute(
 @Composable
 fun ShippingGuideRuteContent(
     paddingValues: PaddingValues,
-    selected: (String) -> Unit,
+    selected: (String, RequestProductsEnum) -> Unit,
     guideId: String
 ) {
     val travelRoute = mockTravelRoutes().filter { it.guideRouteId == guideId }
@@ -87,7 +89,7 @@ fun ShippingGuideRuteContent(
                 CardContent(
                     travelRoute[cont],
                     selected = {
-                        selected(it.id)
+                        selected(it.id, RequestProductsEnum.TRAVEL_ROUTE)
                     }
                 )
             }
@@ -118,6 +120,25 @@ fun ShippingGuideRuteContent(
             containerColor = MaterialTheme.colorScheme.primary,
             expanded = readyToStart
         )
+
+        FloatingActionButton(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(horizontal = 14.dp, vertical = 20.dp),
+            onClick = {
+                selected(guideId, RequestProductsEnum.GUIDE_ROUTE)
+
+            },
+            containerColor = MaterialTheme.colorScheme.primary,
+
+            ) {
+            Image(
+                painter = painterResource(id = R.drawable.all_products),
+                contentDescription = "Extended floating action button.",
+                modifier = Modifier.size(24.dp),
+            )
+        }
+
 
     }
 

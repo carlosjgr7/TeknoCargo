@@ -33,6 +33,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -47,15 +48,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.delivery.tecnokargo.R
 import com.delivery.tecnokargo.components.RecognizerBarCode
 import com.delivery.tecnokargo.components.TopBar
-import com.delivery.tecnokargo.mockdata.mockProducts
 import com.delivery.tecnokargo.shipipin_guide.presentation.viewdata.Product
+import com.delivery.tecnokargo.shipipin_product.presentation.viewmodels.ShippingProductViewModel
+import com.delivery.tecnokargo.shipipin_rute.presentation.model.RequestProductsEnum
 
 @Composable
 fun ShippingProductRute(
     id: String,
+    seekProducts: RequestProductsEnum = RequestProductsEnum.TRAVEL_ROUTE,
     gotoBack: () -> Unit = {},
 ) {
     Scaffold(
@@ -74,11 +78,8 @@ fun ShippingProductRute(
         content = { paddingValues ->
             ShippingProductRouteContent(
                 paddingValues,
-                selected = {
-
-                },
-                ruteId = id
-
+                ruteId = id,
+                type = seekProducts
             )
         }
     )
@@ -89,13 +90,19 @@ fun ShippingProductRute(
 @Composable
 fun ShippingProductRouteContent(
     paddingValues: PaddingValues,
-    selected: () -> Unit,
-    ruteId: String
+    ruteId: String,
+    type: RequestProductsEnum
 ) {
+    val viewModel = hiltViewModel<ShippingProductViewModel>()
+    viewModel.getProducts(ruteId, type)
+
+    var productsviemodel = viewModel.productsFilter.collectAsState()
+
+    var products = remember { mutableStateOf(productsviemodel.value) }
     val context = LocalContext.current
     var productid by remember { mutableStateOf("") }
     var aling by remember { mutableStateOf(Alignment.CenterHorizontally) }
-    var products by remember { mutableStateOf<List<Product>>(mockProducts().filter { it.travelRouteId == ruteId }) }
+
 
     var viewScanner by remember { mutableStateOf(false) }
     var dynamicWeight by remember { mutableFloatStateOf(1f) }
@@ -132,7 +139,7 @@ fun ShippingProductRouteContent(
                         onDimissPermission = { viewScanner = false },
                         onScan = {
                             productid = it.uppercase()
-                            products = toggleProductChecking(products, productid, context)
+                            products.value = toggleProductChecking(products.value, productid, context) {}
                         }
                     )
                 }
@@ -168,7 +175,9 @@ fun ShippingProductRouteContent(
             }
             OutlinedButton(
                 onClick = {
-                    products = toggleProductChecking(products, productid, context)
+                    products.value = toggleProductChecking(products.value, productid, context) {
+                        productid = ""
+                    }
                 },
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
@@ -191,9 +200,9 @@ fun ShippingProductRouteContent(
                 modifier = Modifier
                     .fillMaxSize(),
             ) {
-                items(products.size) { cont ->
+                items(products.value.size) { cont ->
                     CardProductContent(
-                        products[cont],
+                        products.value[cont],
                         selected = {
                             productid = it
                         },
@@ -235,6 +244,7 @@ private fun toggleProductChecking(
     products: List<Product>,
     productId: String,
     context: Context,
+    checked: () -> Unit = {},
 ): List<Product> {
     val audioResourceId = R.raw.pitido
     val mediaPlayer = MediaPlayer.create(context, audioResourceId)
@@ -246,10 +256,12 @@ private fun toggleProductChecking(
                 VibrationEffect
                     .createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
             )
+            checked.invoke()
             product.copy(checking = true)
         } else {
             product
         }
+
     }
 }
 
