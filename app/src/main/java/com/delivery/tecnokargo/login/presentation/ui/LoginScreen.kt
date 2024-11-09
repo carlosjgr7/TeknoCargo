@@ -38,7 +38,7 @@ import com.delivery.tecnokargo.components.BackToExitHandler
 import com.delivery.tecnokargo.components.GenericAlertDialog
 import com.delivery.tecnokargo.components.LoadingComponent
 import com.delivery.tecnokargo.core.Resources
-import com.delivery.tecnokargo.login.domain.data.LoginPresentationData
+import com.delivery.tecnokargo.login.presentation.model.LoginPresentationData
 import com.delivery.tecnokargo.login.presentation.model.StateEnum
 import com.delivery.tecnokargo.login.presentation.viewmodels.LoginViewModel
 
@@ -71,6 +71,7 @@ fun LoginContent(
             StateEnum.LOADING -> {
                 LoadingComponent()
             }
+
             StateEnum.ERROR -> {
                 GenericAlertDialog(
                     onDismiss = {},
@@ -83,92 +84,94 @@ fun LoginContent(
                     }
                 )
             }
+
             StateEnum.NOTHING -> {}
         }
-
-        LaunchedEffect(loginState) {
-            when (loginState) {
-                is Resources.Loading -> {
-                    stateShow =
-                        if ((loginState as Resources.Loading<LoginPresentationData>).data) StateEnum.LOADING else StateEnum.NOTHING
-                }
-                is Resources.Success -> {
-                    advance.invoke()
-                }
-                is Resources.Failure -> {
-                    stateShow = StateEnum.ERROR
-
-                }
-            }
-        }
-
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Login",
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
-            OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Username") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                modifier = Modifier.fillMaxWidth(),
-                trailingIcon = {
-                    val image =
-                        if (passwordVisible) {
-                            Icons.Filled.Visibility
-                        } else {
-                            Icons.Filled.VisibilityOff
-                        }
-                    val description = if (passwordVisible) "Hide password" else "Show password"
-
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(
-                            imageVector = image,
-                            description,
-                            tint = Color(0xFFCDCDCD),
-                        )
-                    }
-                }
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                onClick = {
-                    viewModel.makeLogin(username, password)
-                },
-            ) {
-                Text("Login", color = Color.White)
-            }
-        }
-
-
     }
+    LaunchedEffect(loginState) {
+        when (loginState) {
+            is Resources.Loading -> {
+                stateShow =
+                    if ((loginState as Resources.Loading<LoginPresentationData>).data) StateEnum.LOADING else StateEnum.NOTHING
+            }
+
+            is Resources.Success -> {
+                advance.invoke()
+            }
+
+            is Resources.Failure -> {
+                stateShow = StateEnum.ERROR
+            }
+        }
+    }
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Login",
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(bottom = 24.dp)
+        )
+        OutlinedTextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Username") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password") },
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            modifier = Modifier.fillMaxWidth(),
+            trailingIcon = {
+                val image =
+                    if (passwordVisible) {
+                        Icons.Filled.Visibility
+                    } else {
+                        Icons.Filled.VisibilityOff
+                    }
+                val description = if (passwordVisible) "Hide password" else "Show password"
+
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        imageVector = image,
+                        description,
+                        tint = Color(0xFFCDCDCD),
+                    )
+                }
+            }
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            onClick = {
+                viewModel.makeLogin(username, password)
+            },
+        ) {
+            Text("Login", color = Color.White)
+        }
+    }
+
+
 }
 
 
-    @Preview(showBackground = true)
-    @Composable
-    fun LoginScreenPreview() {
-        LoginScreen(advance = {})
-    }
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    LoginScreen(advance = {})
+}

@@ -5,5 +5,3 @@ sealed class Resources<out T> {
     data class Success<out T>(val data: T) : Resources<T>()
     data class Failure(val exeption: Throwable) : Resources<Nothing>()
 }
-
-fun <T> Resources<T>.resetStatep(): Resources<T> = Resources.Loading(false)

@@ -4,9 +4,8 @@ import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
-import com.delivery.tecnokargo.core.data.preferences.CONSTANTS
+import com.delivery.tecnokargo.core.data.CONSTANTS
 import com.delivery.tecnokargo.core.data.preferences.LocalStorage
-import com.google.android.datatransport.BuildConfig
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -14,7 +13,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -91,7 +89,6 @@ class NetworkModule {
         return Json { ignoreUnknownKeys = true }
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     @Provides
     fun provideRetrofit(
         json: Json,

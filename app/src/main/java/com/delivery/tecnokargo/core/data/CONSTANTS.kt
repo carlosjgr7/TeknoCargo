@@ -1,4 +1,4 @@
-package com.delivery.tecnokargo.core.data.preferences
+package com.delivery.tecnokargo.core.data
 
 class CONSTANTS {
     companion object {

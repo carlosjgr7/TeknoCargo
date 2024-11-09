@@ -1,8 +1,8 @@
 package com.delivery.tecnokargo.login.domain
 
 import com.delivery.tecnokargo.login.data.repository.ILoginRepository
-import com.delivery.tecnokargo.login.domain.data.LoginPresentationData
-import com.delivery.tecnokargo.login.domain.data.toPresentation
+import com.delivery.tecnokargo.login.presentation.model.LoginPresentationData
+import com.delivery.tecnokargo.login.presentation.model.toPresentation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
