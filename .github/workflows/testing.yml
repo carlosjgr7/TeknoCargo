@@ -15,5 +15,5 @@ jobs:
           cache: gradle
 
       - name: Run Specific Unit Test
-        run: ./gradlew testDebugUnitTest --tests "com.delivery.tecnokargo.login.domain.LoginUseCaseTest"
+        run: ./gradlew testDebugUnitTest --tests "LoginUseCaseTest"
 
