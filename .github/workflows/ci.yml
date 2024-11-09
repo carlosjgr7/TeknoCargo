@@ -1,23 +1,31 @@
 name: Android CI
+
 on:
   push:
     branches: ["ci/cd"]
   pull_request:
-    branches: [ "ci/cd" ]
-
+    branches: ["ci/cd"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: setup jdk
+
+      - name: Setup JDK (consider using Java 17 for Compose compatibility)
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '17'
           cache: 'gradle'
-      - name: setup graddle
-        uses: gradle/gradle-build-action@v2
-      - name: build app
-        run: ./gradlew assemble
+
+      - name: Cache Gradle distribution (optional)
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build app (consider specifying build variant)
+        run: ./gradlew assembleDebug
