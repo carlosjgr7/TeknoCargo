@@ -29,8 +29,8 @@ class LoginUseCaseTest {
 
     @Test
     fun `login with valid credentials should return user presentation data`(): Unit = runBlocking {
-        val username = "carlosjgr7"
-        val password = "carlosjgr7$"
+        val username = "user"
+        val password = "pass"
         val loginResponse = LoginResponse(message = "Login correcto")
         val expectedPresentationData = LoginPresentationData(name = "Login correcto")
         val data: List<String> = listOf(CONSTANTS.NUMBERDB, username, password)

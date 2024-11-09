@@ -24,7 +24,6 @@ class LoginViewModelTest {
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
-
     private val loginUseCase: LoginUseCase = Mockito.mock(LoginUseCase::class.java)
     private lateinit var loginViewModel: LoginViewModel
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -36,20 +35,19 @@ class LoginViewModelTest {
 
     @Test
     fun `login with valid credentials should update coroutine correctly`() = runTest {
-        val username = "carlosjgr7"
-        val password = "carlosjgr7$"
+        val username = "user"
+        val password = "pass"
         val loginResponse = LoginPresentationData(name = "Login correcto")
         val expectedPresentationData =
             Resources.Success(LoginPresentationData(name = "Login correcto"))
-
         val data: List<String> = listOf(CONSTANTS.NUMBERDB, username, password)
-
         whenever(loginUseCase.invoke(data)).thenReturn(flowOf(Result.success(loginResponse)))
+
         var emissionCount = 0
         val loginStateFlow = loginViewModel.loginState
+
         loginViewModel.makeLogin(username, password)
         loginStateFlow.take(2).collect { result ->
-            println("Login State: $result")
             when (emissionCount) {
                 0 -> {
                     Assert.assertTrue(result is Resources.Loading)
