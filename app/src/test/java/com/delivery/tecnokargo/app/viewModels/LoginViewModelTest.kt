@@ -19,7 +19,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.whenever
 
@@ -29,27 +31,28 @@ class LoginViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var loginViewModel: LoginViewModel
+    @Mock
     private lateinit var mockLoginUseCase: LoginUseCase
+
+    private lateinit var loginViewModel: LoginViewModel
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 
     @Before
     fun setUp() {
-        mockLoginUseCase = Mockito.mock(LoginUseCase::class.java)
+        MockitoAnnotations.openMocks(this) // Inicializa los mocks
         loginViewModel = LoginViewModel(dispatcher, mockLoginUseCase)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `login with valid credentials should update coroutine correctly`() = runTest {
+    fun `login with valid credentials should update coroutine correctly`() = runBlockingTest {
         val username = "user"
         val password = "pass"
         val loginResponse = LoginPresentationData(name = "Login correcto")
         val expectedPresentationData = Resources.Success(loginResponse)
         val data: List<String> = listOf(CONSTANTS.NUMBERDB, username, password)
 
-        // Setup the behavior of the mocked use case
-        whenever(mockLoginUseCase.invoke(data)).thenReturn(flowOf(Result.success(loginResponse)))
+        // Configurar el comportamiento del mock
+        Mockito.`when`(mockLoginUseCase.invoke(data)).thenReturn(flowOf(Result.success(loginResponse)))
 
         var emissionCount = 0
         val loginStateFlow = loginViewModel.loginState
