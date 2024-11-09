@@ -92,6 +92,7 @@ chucker-release = { group = "com.github.chuckerteam.chucker", name = "library-no
 #Test
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref="mockito-core"}
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref="mockito-kotlin"}
+mockito-inline = { group = "org.mockito", name = "mockito-inline", version.ref="mockito-kotlin"}
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref="kotlinx-coroutines-test"}
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 slf4jSimple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4jSimple" }
