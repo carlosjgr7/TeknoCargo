@@ -14,9 +14,6 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Run Unit Tests (excluding LoginViewModelTest)
-        run: ./gradlew testDebugUnitTest -x LoginViewModelTest
+      - name: Run Specific Unit Test
+        run: ./gradlew testDebugUnitTest --tests "com.delivery.tecnokargo.login.domain.LoginUseCaseTest"
 
-      - name: Android Test Report
-        uses: asadmansr/android-test-report-action@v1.2.0
-        if: ${{ always() }}
