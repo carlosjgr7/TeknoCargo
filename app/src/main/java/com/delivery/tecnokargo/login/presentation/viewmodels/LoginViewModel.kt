@@ -36,11 +36,11 @@ class LoginViewModel
                 result.fold(
                     onSuccess = { value ->
                         _login.value = Resources.Success(value)
-//                        Log.d("LoginViewModel", "Login succeeded with value: $value")
+                        Log.d("LoginViewModel", "Login succeeded with value: $value")
                     },
                     onFailure = { error ->
                         _login.value = Resources.Failure(error)
-//                        Log.e("LoginViewModel", "Login failed with error: ${error.message}")
+                        Log.e("LoginViewModel", "Login failed with error: ${error.message}")
                     }
                 )
             }
