@@ -22,7 +22,6 @@ class LoginUseCase @Inject constructor(
             )
 
         }
-
 }
 
 

@@ -6,13 +6,9 @@ import com.delivery.tecnokargo.login.presentation.model.LoginPresentationData
 import com.delivery.tecnokargo.login.presentation.viewmodels.LoginViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -23,7 +19,6 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.whenever
 
 @RunWith(MockitoJUnitRunner::class)
 class LoginViewModelTest {
@@ -39,19 +34,18 @@ class LoginViewModelTest {
 
     @Before
     fun setUp() {
-        MockitoAnnotations.openMocks(this) // Inicializa los mocks
+        MockitoAnnotations.openMocks(this)
         loginViewModel = LoginViewModel(dispatcher, mockLoginUseCase)
     }
 
     @Test
-    fun `login with valid credentials should update coroutine correctly`() = runBlockingTest {
+    fun `login with valid credentials should update coroutine correctly`() = runTest {
         val username = "user"
         val password = "pass"
         val loginResponse = LoginPresentationData(name = "Login correcto")
         val expectedPresentationData = Resources.Success(loginResponse)
         val data: List<String> = listOf(CONSTANTS.NUMBERDB, username, password)
 
-        // Configurar el comportamiento del mock
         Mockito.`when`(mockLoginUseCase.invoke(data)).thenReturn(flowOf(Result.success(loginResponse)))
 
         var emissionCount = 0
