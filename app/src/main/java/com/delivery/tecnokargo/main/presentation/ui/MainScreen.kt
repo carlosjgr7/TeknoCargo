@@ -18,9 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.delivery.tecnokargo.components.BackToExitHandler
-import com.delivery.tecnokargo.components.BottomNavigationBar
 import com.delivery.tecnokargo.components.TopBar
-import com.delivery.tecnokargo.core.navigations.ButtomBarOptions
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -28,20 +26,10 @@ fun MainScreen(
     goToShippinGuide: () -> Unit,
     goToStatistics: () -> Unit,
     goToMoveShipping: () -> Unit,
-    goToSettings: () -> Unit,
-    goToBack: () -> Unit,
 ) {
     BackToExitHandler()
     Scaffold(
         topBar = { TopBar("Main Screen") },
-        bottomBar = {
-            BottomNavigationBar(ButtomBarOptions.Home) {
-                when (it) {
-                    ButtomBarOptions.Home -> {}
-                    ButtomBarOptions.Settings -> goToSettings.invoke()
-                }
-            }
-        },
         content = { paddingValues ->
             MainScreenContent(
                 modifier = Modifier
@@ -82,7 +70,7 @@ fun MainScreenContent(
             .fillMaxSize()
     ) {
         GreetingSection(visible, speedAnimation)
-        SmallSection(visible, speedAnimation, Modifier.weight(1.4f),
+        SmallSection(visible, speedAnimation, Modifier.weight(1.2f),
             goToShippinGuide = {
                 goToShippinGuide.invoke()
             },
@@ -94,7 +82,7 @@ fun MainScreenContent(
         BigSection(visible, speedAnimation, Modifier.weight(1f)) {
             goToStatistics.invoke()
         }
-
+        Spacer(Modifier.weight(0.3f))
     }
 }
 
@@ -105,7 +93,5 @@ fun MainScreenPreview() {
         goToShippinGuide = {},
         {},
         {},
-        {},
-        {}
     )
 }

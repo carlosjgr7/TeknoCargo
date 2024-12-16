@@ -1,6 +1,6 @@
 package com.delivery.tecnokargo.login.di
 
-import com.delivery.tecnokargo.login.data.LoginRepositoryImplements
+import com.delivery.tecnokargo.login.data.datasource.LoginRepositoryImplements
 import com.delivery.tecnokargo.login.data.datasource.network.LoginRemoteDataSource
 import com.delivery.tecnokargo.login.data.repository.ILoginRepository
 import com.delivery.tecnokargo.login.domain.LoginUseCase

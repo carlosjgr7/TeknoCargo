@@ -28,8 +28,7 @@ import androidx.camera.mlkit.vision.MlKitAnalyzer
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun RecognizerBarCode(
-    onScan: (String) -> Unit,
-    onDimissPermission: () -> Unit
+    onScan: (String) -> Unit, onDimissPermission: () -> Unit
 ) {
 
     val cameraPermissionState = rememberPermissionState(
@@ -48,16 +47,14 @@ fun RecognizerBarCode(
     }
 
     if (requestPermisions) {
-        GenericAlertDialog(
-            onDismiss = {
-                requestPermisions = false
-                onDimissPermission.invoke()
-            },
+        GenericAlertDialog(onDismiss = {
+            requestPermisions = false
+            onDimissPermission.invoke()
+        },
             title = "Permission",
             message = "please provide camera permission",
             confirmButton = "Request permission",
-            onAction = { cameraPermissionState.launchPermissionRequest() }
-        )
+            onAction = { cameraPermissionState.launchPermissionRequest() })
     }
 }
 
@@ -70,8 +67,7 @@ fun CameraX(
         AndroidView(factory = { context ->
             val previewView = PreviewView(context)
             startCamera(context, lifecycleOwner, previewView) { value ->
-                if (value.isNotEmpty())
-                    onScan(value)
+                if (value.isNotEmpty()) onScan(value)
             }
             previewView
         }, modifier = Modifier.fillMaxSize())
@@ -86,7 +82,17 @@ private fun startCamera(
 ) {
     val cameraController = LifecycleCameraController(context)
     val option = BarcodeScannerOptions.Builder()
-        .setBarcodeFormats(Barcode.FORMAT_QR_CODE, Barcode.FORMAT_AZTEC)
+        .setBarcodeFormats(
+            Barcode.FORMAT_QR_CODE,
+            Barcode.FORMAT_AZTEC,
+            Barcode.FORMAT_CODE_128,
+            Barcode.FORMAT_CODE_39,
+            Barcode.FORMAT_EAN_13,
+            Barcode.FORMAT_EAN_8,
+            Barcode.FORMAT_UPC_A,
+            Barcode.FORMAT_UPC_E,
+            Barcode.FORMAT_ALL_FORMATS
+        )
         .build()
 
     val barcodeScanner = BarcodeScanning.getClient(option)
@@ -101,8 +107,7 @@ private fun startCamera(
 
     }
     cameraController.setImageAnalysisAnalyzer(
-        ContextCompat.getMainExecutor(context),
-        mlkitAnalizer
+        ContextCompat.getMainExecutor(context), mlkitAnalizer
     )
     cameraController.bindToLifecycle(lifecycleOwner)
     previewView.controller = cameraController

@@ -60,8 +60,8 @@ fun LoginContent(
     advance: () -> Unit,
 ) {
     val viewModel: LoginViewModel = hiltViewModel()
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("carlosjgr7") }
+    var password by remember { mutableStateOf("carlosjgr7$") }
     var passwordVisible by remember { mutableStateOf(false) }
     var stateShow by remember { mutableStateOf(StateEnum.NOTHING) }
     val loginState by viewModel.loginState.collectAsState()
@@ -122,14 +122,14 @@ fun LoginContent(
         )
         OutlinedTextField(
             value = username,
-            onValueChange = { username = it },
+            onValueChange = { username = it.trim() },
             label = { Text("Username") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { password = it.trim() },
             label = { Text("Password") },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),

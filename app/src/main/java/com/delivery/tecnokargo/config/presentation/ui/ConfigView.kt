@@ -24,29 +24,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.delivery.tecnokargo.R
-import com.delivery.tecnokargo.components.BottomNavigationBar
 import com.delivery.tecnokargo.components.TopBar
-import com.delivery.tecnokargo.core.navigations.ButtomBarOptions
-import com.delivery.tecnokargo.main.presentation.ui.MainScreenContent
 
 @Composable
 fun ConfigView(
-    goToHome: () -> Unit = {},
     logout: () -> Unit = {},
 
     ) {
     Scaffold(
         topBar = { TopBar("Settings") },
-        bottomBar = {
-            BottomNavigationBar(ButtomBarOptions.Settings) {
-                when (it) {
-                    ButtomBarOptions.Home -> {
-                        goToHome.invoke()
-                    }
-                    ButtomBarOptions.Settings -> {}
-                }
-            }
-        },
         content = { paddingValues ->
             ConfigScreenContent(
                 modifier = Modifier

@@ -1,4 +1,4 @@
-package com.delivery.tecnokargo.login.data
+package com.delivery.tecnokargo.login.data.datasource
 
 import com.delivery.tecnokargo.login.data.datasource.network.LoginRemoteDataSource
 import com.delivery.tecnokargo.login.data.datasource.network.response.LoginResponse

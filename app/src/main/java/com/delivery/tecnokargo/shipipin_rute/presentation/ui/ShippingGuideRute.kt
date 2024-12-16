@@ -19,6 +19,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -27,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.delivery.tecnokargo.R
+import com.delivery.tecnokargo.components.GenericAlertDialog
 import com.delivery.tecnokargo.components.TopBar
 import com.delivery.tecnokargo.mockdata.mockTravelRoutes
 import com.delivery.tecnokargo.shipipin_guide.presentation.viewdata.TravelRoute
@@ -36,6 +39,7 @@ import com.delivery.tecnokargo.shipipin_rute.presentation.model.RequestProductsE
 fun ShippingGuideRute(
     id: String,
     goToRuteDetail: (String, RequestProductsEnum) -> Unit = ({ _, _ -> }),
+    goToMap: () -> Unit = {},
     gotoBack: () -> Unit = {},
 
     ) {
@@ -61,6 +65,9 @@ fun ShippingGuideRute(
                 selected = { id, type ->
                     goToRuteDetail(id, type)
                 },
+                goToMap = {
+                    goToMap.invoke()
+                },
                 guideId = id,
             )
         },
@@ -73,10 +80,25 @@ fun ShippingGuideRute(
 fun ShippingGuideRuteContent(
     paddingValues: PaddingValues,
     selected: (String, RequestProductsEnum) -> Unit,
-    guideId: String
+    guideId: String,
+    goToMap: () -> Unit
 ) {
     val travelRoute = mockTravelRoutes().filter { it.guideRouteId == guideId }
     val readyToStart = travelRoute.firstOrNull { !it.checking } == null
+    val checkin = remember { mutableStateOf(false) }
+
+    if (checkin.value) {
+        GenericAlertDialog(
+            title = "RUTAS NO REVISADAS",
+            message = "Los viajes solo pueden iniciar si reviso todos los productos de cada ruta",
+            confirmButton = "OK",
+            onAction = {
+                checkin.value = false
+            },
+            onDismiss = {},
+            showCancel = false
+        )
+    }
 
     Box {
         LazyColumn(
@@ -95,12 +117,13 @@ fun ShippingGuideRuteContent(
             }
         }
 
+
         ExtendedFloatingActionButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(horizontal = 14.dp, vertical = 20.dp),
             onClick = {
-
+                if (readyToStart) goToMap.invoke() else checkin.value = true
             },
             icon = {
                 Icon(
@@ -127,11 +150,9 @@ fun ShippingGuideRuteContent(
                 .padding(horizontal = 14.dp, vertical = 20.dp),
             onClick = {
                 selected(guideId, RequestProductsEnum.GUIDE_ROUTE)
-
             },
             containerColor = MaterialTheme.colorScheme.primary,
-
-            ) {
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.all_products),
                 contentDescription = "Extended floating action button.",

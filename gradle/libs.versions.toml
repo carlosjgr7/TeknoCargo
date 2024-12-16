@@ -35,6 +35,10 @@ kotlinx-coroutines-test="1.6.4"
 mockk = "1.13.5"
 slf4jSimple = "2.0.9"
 archcore="2.2.0"
+map-compose = "2.11.4"
+play-services = "19.0.0"
+play-services-plugin = "4.4.2"
+maps-location = "21.0.1"
 
 
 
@@ -112,9 +116,17 @@ play-services-mlkit-barcode-scanning = { group = "com.google.android.gms", name 
 play-services-mlkit-text-recognition-common = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-common", version.ref = "play-services-mlkit-text-recognition-common" }
 play-services-mlkit-text-recognition = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition", version.ref = "play-services-mlkit-text-recognition" }
 
+#Mapas
+maps-compose = { group = "com.google.maps.android", name= "maps-compose", version.ref= "map-compose"}
+maps-location = { group = "com.google.android.gms", name= "play-services-location", version.ref= "maps-location"}
+
+play-services = { group = "com.google.android.gms", name= "play-services-maps", version.ref= "play-services"}
+
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 jetbrainsKotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize",  version.ref = "kotlinParcelize"  }
+play-services = { id = "com.google.gms.google-services", version.ref ="play-services-plugin"}

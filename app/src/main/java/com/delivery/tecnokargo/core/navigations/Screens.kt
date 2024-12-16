@@ -13,6 +13,9 @@ object Login
 object Home
 
 @Serializable
+object Principal
+
+@Serializable
 object Settings
 
 @Serializable
@@ -23,6 +26,9 @@ object Statistics
 
 @Serializable
 object MoveShipping
+
+@Serializable
+object Map
 
 @Serializable
 data class ShippingGuideRoute(val id: String)

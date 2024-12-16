@@ -1,17 +1,15 @@
 package com.delivery.tecnokargo.core.navigations
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.delivery.tecnokargo.config.presentation.ui.ConfigView
+import com.delivery.tecnokargo.core.PrincipalScreen
 import com.delivery.tecnokargo.login.presentation.ui.LoginScreen
-import com.delivery.tecnokargo.main.presentation.ui.MainScreen
+import com.delivery.tecnokargo.map.presentation.ui.MapScreen
 import com.delivery.tecnokargo.move_shipping.presentation.ui.MoveRouteView
 import com.delivery.tecnokargo.shipipin_guide.presentation.ui.ShipGuideScreen
 import com.delivery.tecnokargo.shipipin_product.presentation.ui.ShippingProductRute
@@ -44,6 +42,42 @@ fun AppNavigation() {
             SplashScreen { navController.navigate(Login) }
         }
 
+        composable<Principal>(
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(animationSpeed),
+                )
+            },
+        ) {
+            PrincipalScreen(
+                goToShippinGuide = { navController.navigate(ShippingGuide) },
+                goToStatistics = { navController.navigate(Statistics) },
+                goToMoveShipping = { navController.navigate(MoveShipping) },
+                logout = {navController.navigate(Login)}
+
+            )
+        }
+
         composable<Login>(
             enterTransition = {
                 slideIntoContainer(
@@ -71,46 +105,10 @@ fun AppNavigation() {
             },
         ) {
             LoginScreen {
-                navController.navigate(Home)
+                navController.navigate(Principal)
             }
         }
 
-        composable<Home>(
-            enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(animationSpeed),
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(animationSpeed),
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(animationSpeed),
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(animationSpeed),
-                )
-            },
-        ) {
-            MainScreen(
-                goToShippinGuide = { navController.navigate(ShippingGuide) },
-                goToStatistics = { navController.navigate(Statistics) },
-                goToMoveShipping = { navController.navigate(MoveShipping) },
-                goToBack = { navController.popBackStack() },
-                goToSettings = {
-                    navController.navigate(Settings)
-                }
-            )
-        }
 
         composable<ShippingGuide>(
             enterTransition = {
@@ -175,11 +173,14 @@ fun AppNavigation() {
             val shippingGuideRoute: ShippingGuideRoute = backStackEntry.toRoute()
             ShippingGuideRute(
                 id = shippingGuideRoute.id,
-                goToRuteDetail = {id, type ->
+                goToRuteDetail = { id, type ->
                     navController.navigate(ShippingProductRoute(id, type))
                 },
                 gotoBack = {
                     navController.popBackStack()
+                },
+                goToMap = {
+                    navController.navigate(Map)
                 }
             )
         }
@@ -283,7 +284,7 @@ fun AppNavigation() {
             )
         }
 
-        composable<Settings>(
+        composable<Map>(
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
@@ -309,15 +310,9 @@ fun AppNavigation() {
                 )
             },
         ) { backStackEntry ->
-            ConfigView(
-                goToHome = {
-                    navController.navigate(Home)
-                },
-                logout = {
-                    navController.navigate(Login)
-                }
-            )
-
+            MapScreen()
         }
+
+
     }
 }

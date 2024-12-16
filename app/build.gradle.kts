@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.hilt.gradle)
     alias(libs.plugins.jetbrainsKotlinSerialization)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.play.services)
     kotlin("kapt")
 
 }
@@ -96,6 +97,11 @@ dependencies {
     //chucker
     debugImplementation(libs.chucker.debug)
     releaseImplementation(libs.chucker.release)
+    //Mapas
+    implementation(libs.maps.compose)
+    implementation(libs.maps.location)
+    implementation(libs.play.services)
+
     //CameraScann
     implementation(libs.camera.core)
     implementation(libs.camera.camera2)

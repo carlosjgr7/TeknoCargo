@@ -11,7 +11,6 @@ import javax.inject.Inject
 class LoginRemoteDataSource @Inject constructor(
     private val apiLoginService: ILoginService
 ) {
-
     suspend fun login(data: List<String>): Flow<Result<LoginResponse>> = flow {
         try {
             val response = apiLoginService.login(LoginRequest(SP.SP_Validar_Usuario.name, data))

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "275222172837",
+    "project_id": "tecnotrack-7d617",
+    "storage_bucket": "tecnotrack-7d617.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275222172837:android:16af7f55b47cfa70f0294c",
+        "android_client_info": {
+          "package_name": "com.delivery.tecnokargo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrsKauy4kcyP752EJ18Onh4qhdUnvhqnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
